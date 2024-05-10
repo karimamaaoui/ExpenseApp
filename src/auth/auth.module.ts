@@ -4,12 +4,14 @@ import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './entities/user.schema';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
-    PassportModule.register({defaultStrategy: 'jwt'}),
+  PassportModule.register({defaultStrategy: 'jwt'}),
+  MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
   JwtModule.registerAsync({
+    imports:[ConfigModule],
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => {
       return {
@@ -21,8 +23,10 @@ import { ConfigService } from '@nestjs/config';
     }
   }),
     
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema}])],
+],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService, JwtService], 
+  exports: [JwtModule, JwtService],
+
 })
 export class AuthModule {}

@@ -6,10 +6,23 @@ import { ConfigModule } from '@nestjs/config';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { EmailService } from './services/email/email.service';
+import { MailerModule } from '@nestjs-modules/mailer';
 //depensesproject
 
 @Module({
   imports: [
+    MailerModule.forRoot({
+      transport: {
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, 
+        auth: {
+          user: "scongresses@gmail.com",
+          pass: "tlbbxlmptvhoqjlh",
+        },
+      },
+    }),
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
     TransactionsModule,
@@ -18,6 +31,6 @@ import { UsersModule } from './users/users.module';
     
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EmailService],
 })
 export class AppModule {}
