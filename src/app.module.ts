@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { EmailService } from './services/email/email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { CategoryModule } from './category/category.module';
 //depensesproject
 
 @Module({
@@ -28,9 +29,11 @@ import { MailerModule } from '@nestjs-modules/mailer';
     TransactionsModule,
     AuthModule,
     UsersModule,
+    CategoryModule,
+    
     
   ],
   controllers: [AppController],
-  providers: [AppService, EmailService],
+  providers: [AppService, EmailService,],
 })
 export class AppModule {}
