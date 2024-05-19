@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { Transaction } from './entities/transaction.entity';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
@@ -10,7 +20,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  @Post("/add")
+  @Post('/add')
   create(@Body() createTransactionDto: Transaction) {
     return this.transactionsService.create(createTransactionDto);
   }
@@ -35,10 +45,8 @@ export class TransactionsController {
     return this.transactionsService.remove(id);
   }
 
-   @Get('/search')
+  @Get('/search')
   async getTransactions(@Query() query: any): Promise<Transaction[]> {
-      return this.transactionsService.findTransactions(query);
+    return this.transactionsService.findTransactions(query);
   }
-
-
 }
