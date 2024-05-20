@@ -14,28 +14,32 @@ export class TransactionsService {
     @InjectModel(Budget.name) private budgetModel: Model<BudgetDocument>,
   ) {}
 
-  async create(transaction: Transaction): Promise<Transaction> {
-    const budget = await this.budgetModel.findById(transaction.budget).populate('transactions').exec();
-    if (!budget) {
-      throw new NotFoundException('Budget not found');
-    }
+  // async create(transaction: Transaction): Promise<Transaction> {
+  //   const budget = await this.budgetModel.findById(transaction.budget).populate('transactions').exec();
+  //   if (!budget) {
+  //     throw new NotFoundException('Budget not found');
+  //   }
   
-    // Manually cast the populated budget object to include the transactions property
-    const populatedBudget = budget.toObject() as Document & Budget & { transactions: Transaction[] };
+  //   // Manually cast the populated budget object to include the transactions property
+  //   const populatedBudget = budget.toObject() as Document & Budget & { transactions: Transaction[] };
   
-    const totalSpent = populatedBudget.transactions.reduce((sum, t) => sum + t.amount, 0);
+  //   const totalSpent = populatedBudget.transactions.reduce((sum, t) => sum + t.amount, 0);
   
-    if (totalSpent + transaction.amount > populatedBudget.amount) {
-      // Logic to send notification (e.g., email, SMS, in-app notification)
-      this.sendNotification(`Transaction exceeds budget! Total spent: ${totalSpent}, Budget: ${populatedBudget.amount}`);
-      throw new BadRequestException('Transaction exceeds budget');
-    }
+  //   if (totalSpent + transaction.amount > populatedBudget.amount) {
+  //     // Logic to send notification (e.g., email, SMS, in-app notification)
+  //     this.sendNotification(`Transaction exceeds budget! Total spent: ${totalSpent}, Budget: ${populatedBudget.amount}`);
+  //     throw new BadRequestException('Transaction exceeds budget');
+  //   }
   
-    const newTransaction = await this.transactionModel.create(transaction);
-    populatedBudget.transactions.push(newTransaction);
-    await this.budgetModel.findByIdAndUpdate(populatedBudget._id, { transactions: populatedBudget.transactions });
+  //   const newTransaction = await this.transactionModel.create(transaction);
+  //   populatedBudget.transactions.push(newTransaction);
+  //   await this.budgetModel.findByIdAndUpdate(populatedBudget._id, { transactions: populatedBudget.transactions });
   
-    return newTransaction;
+  //   return newTransaction;
+  // }
+  create(transaction: Transaction) : Promise<Transaction>{
+  
+    return this.transactionModel.create(transaction);
   }
 
   findAll(): Promise<Transaction[]> {

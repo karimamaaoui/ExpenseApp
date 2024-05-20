@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Category } from "src/category/entities/category.entity";
-import { Budget } from "src/budget/entities/budget.entity";
+
 
 export type TransactionDocument = Transaction & Document;
 
@@ -23,10 +23,6 @@ export class Transaction {
   @ApiProperty()
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category', required: true }) 
   category: Category;
-
-  @ApiProperty()
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Budget', required: true }) 
-  budget: Budget;
 
   @Prop()
   @ApiProperty()
