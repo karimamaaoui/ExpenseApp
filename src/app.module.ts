@@ -10,6 +10,7 @@ import { EmailService } from './services/email/email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { CategoryModule } from './category/category.module';
 import { BudgetModule } from './budget/budget.module';
+import { ImportModule } from './import/import.module';
 //depensesproject
 
 @Module({
@@ -32,6 +33,7 @@ import { BudgetModule } from './budget/budget.module';
     UsersModule,
     CategoryModule,
     BudgetModule,
+    ImportModule,
     
     
   ],
