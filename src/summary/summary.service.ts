@@ -29,7 +29,7 @@ export class SummaryService {
   async getDetailedSummary(): Promise<DetailedSummary> {
     const transactions = await this.transactionModel.find().populate('category').exec();
     const totalIncome = transactions.filter(t => t.typePayment === 'income').reduce((sum, t) => sum + t.amount, 0);
-    const totalExpense = transactions.filter(t => t.typePayment === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = transactions.filter(t => t.typePayment !== 'expense').reduce((sum, t) => sum + t.amount, 0);
 
     const summaryByCategory: Record<string, CategorySummary> = transactions.reduce((acc, transaction) => {
       const categoryName = (transaction.category as Category).nameCat;
@@ -63,10 +63,7 @@ export class SummaryService {
 
     doc.fontSize(20).text('Transaction Summary', { align: 'center' });
     doc.moveDown();
-    doc.fontSize(14).text(`Total Income: $${summary.totalIncome}`);
     doc.text(`Total Expense: $${summary.totalExpense}`);
-    doc.text(`Net Balance: $${summary.netBalance}`);
-    doc.text(`Transaction Count: ${summary.transactionCount}`);
     doc.moveDown();
 
     doc.fontSize(16).text('Summary by Category', { underline: true });
@@ -74,7 +71,6 @@ export class SummaryService {
 
     for (const [category, { income, expense }] of Object.entries(summary.summaryByCategory)) {
       doc.fontSize(14).text(`Category: ${category}`);
-      doc.text(`  Income: $${income}`);
       doc.text(`  Expense: $${expense}`);
       doc.moveDown();
     }
